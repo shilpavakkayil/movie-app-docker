@@ -1,0 +1,17 @@
+version: '3.9'
+
+services:
+  movie-server:
+    build: ./movie-server
+    ports:
+      - "8080:8080"
+
+  movie-client:
+    build: ./movie-client
+    depends_on:
+      - movie-server
+    profiles:
+      - client
+    command: ["--server","http://movie-server:8080",
+              "--username","username","--password","password",
+              "2020","2021"]
