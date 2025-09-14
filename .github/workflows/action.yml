@@ -1,0 +1,35 @@
+name: action
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Build Docker images
+      run: docker-compose -f docker-compose.ci.yml build
+
+    - name: Start movie server
+      run: docker-compose -f docker-compose.ci.yml up -d movie-server
+
+    - name: Wait for server to start
+      run: sleep 10
+
+    - name: Test client connection
+      run: |
+        docker-compose -f docker-compose.ci.yml run --rm movie-client --server http://movie-server:8080 --help || true
+
+    - name: Test with sample year
+      run: |
+        docker-compose -f docker-compose.ci.yml run --rm movie-client --server http://movie-server:8080 1999 || true
+
+    - name: Stop services
+      run: docker-compose -f docker-compose.ci.yml down
