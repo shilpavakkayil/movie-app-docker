@@ -10,6 +10,7 @@ A Python containerized command-line app for querying the movie database REST API
 - Docker Compose
 
 ## Project structure
+
 - movie-app-docker
     - movie-client
         - Docker file
@@ -58,7 +59,7 @@ docker compose run --rm movie-client --server http://movie-server:8080 2020 2021
 
 ## Continuous Integration
 
-This project includes GitHub Actions for automated testing:
+This project uses GitHub Actions for automated testing:
 
 - **Triggers**: Pushes to `main` branch and pull requests to `main`
 - **Actions**: 
